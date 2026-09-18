@@ -1,6 +1,9 @@
 packages: []
 
 allowBuilds:
-  sharp: true
+  esbuild: true
+  msgpackr-extract: true
   unrs-resolver: true
-  msw: false
+  workerd: true
+  "@prisma/client": true
+  "@prisma/engines": true

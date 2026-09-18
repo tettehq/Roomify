@@ -1,0 +1,19 @@
+generator client {
+    provider = "prisma-client-js"
+    output   = "../generated/prisma/client"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+model Room {
+    id  String  @id @default(cuid())
+    name String
+    description String
+    item String
+    details String
+    price Int
+    tag String?
+    featured Boolean @default(false)
+}

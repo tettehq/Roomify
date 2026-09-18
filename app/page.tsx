@@ -1,12 +1,17 @@
 import Link from "next/link"
+import { prisma } from "@/lib/prisma"
 import { ArrowRight, Leaf, ShieldCheck, Sparkles } from "lucide-react"
 import { BookingSearch } from "@/components/home/BookingSearch"
 import { Footer } from "@/components/home/Footer"
 import { Header } from "@/components/home/Header"
 import { RoomCard } from "@/components/home/RoomCard"
-import { featuredRooms } from "@/components/home/data"
+// import { featuredRooms } from "@/components/home/data"
 
-export default function Page() {
+export default async function Page() {
+  const featuredRooms = await prisma.room.findMany({
+    where:{
+    featured: true},
+  })
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#faf9f6] text-[#0f172a]">
       <Header />
