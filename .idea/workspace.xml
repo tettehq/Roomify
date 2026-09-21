@@ -6,6 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="1b08f90b-7249-4e15-8f63-aadde284d4f1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AGENTS.md" beforeDir="false" afterPath="$PROJECT_DIR$/AGENTS.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/home/BookingSearch.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/home/BookingSearch.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/home/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/home/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/home/RoomCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/home/RoomCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-workspace.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-workspace.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,13 +61,16 @@
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "git-widget-placeholder": "main",
     "javascript.preferred.runtime.type.id": "node",
+    "js.debugger.nextJs.config.created.client": "true",
+    "js.debugger.nextJs.config.created.server": "true",
     "junie.onboarding.icon.badge.shown": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "to.speed.mode.migration.done": "true"
+    "to.speed.mode.migration.done": "true",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2025.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external"
   }
 }]]></component>
   <component name="ReactDesignerToolWindowState">
@@ -68,6 +81,21 @@
         <entry key="com.intellij.reactbuddy.storybook" value="false" />
       </map>
     </option>
+  </component>
+  <component name="RunManager" selected="npm.Next.js: server-side">
+    <configuration name="Next.js: debug client-side" type="JavascriptDebugType" uri="http://localhost:3000/">
+      <method v="2" />
+    </configuration>
+    <configuration name="Next.js: server-side" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -86,7 +114,8 @@
       <workItem from="1789068836014" duration="5925000" />
       <workItem from="1789201664536" duration="19000" />
       <workItem from="1789398814802" duration="6235000" />
-      <workItem from="1789672881326" duration="1489000" />
+      <workItem from="1789672881326" duration="2689000" />
+      <workItem from="1789728580966" duration="11231000" />
     </task>
     <servers />
   </component>

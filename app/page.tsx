@@ -3,8 +3,8 @@ import { ArrowRight, Leaf, ShieldCheck, Sparkles } from "lucide-react"
 import { BookingSearch } from "@/components/home/BookingSearch"
 import { Footer } from "@/components/home/Footer"
 import { Header } from "@/components/home/Header"
-import { RoomCard } from "@/components/home/RoomCard"
-import { featuredRooms } from "@/components/home/data"
+import { Suspense } from "react"
+import { FeaturedRooms, RoomMessage } from "@/components/home/FeaturedRooms"
 
 export default function Page() {
   return (
@@ -77,11 +77,9 @@ export default function Page() {
               View all rooms <ArrowRight size={16} />
             </Link>
           </div>
-          <div className="grid gap-5 md:grid-cols-3">
-            {featuredRooms.map((room) => (
-              <RoomCard key={room.id} room={room} />
-            ))}
-          </div>
+          <Suspense fallback={<RoomMessage>Loading rooms…</RoomMessage>}>
+            <FeaturedRooms />
+          </Suspense>
         </section>
         <section id="experience" className="bg-[#1b4332] text-white">
           <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 sm:px-8 md:grid-cols-[0.9fr_1.1fr] md:items-center md:py-20">
