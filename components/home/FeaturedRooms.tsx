@@ -36,7 +36,7 @@ export function RoomMessage({ children }: { children: React.ReactNode }) {
   return (
     <p
       role="status"
-      className="rounded-2xl border border-[#e7e5e0] bg-white p-8 text-center text-sm text-[#64748b]"
+      className="rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground"
     >
       {children}
     </p>

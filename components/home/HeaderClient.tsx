@@ -1,145 +1,223 @@
 "use client"
 
 import Link from "next/link"
-import { LogOut, Menu, X } from "lucide-react"
+import { usePathname } from "next/navigation"
 import { useState } from "react"
+import { useTheme } from "next-themes"
+import {
+  BedDouble,
+  CalendarDays,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  Moon,
+  Settings2,
+  Sun,
+  UtensilsCrossed,
+} from "lucide-react"
 import { logoutAction } from "@/app/actions/auth"
 import type { SafeUser } from "@/data/users"
+import { Button, buttonVariants } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+import { cn } from "@/lib/utils"
 
 type HeaderUser = Pick<SafeUser, "name" | "role">
-
-function Brand() {
-  return (
-    <Link
-      href="/"
-      className="flex items-center gap-2"
-      aria-label="Roomify home"
-    >
-      <span className="flex h-9 w-9 items-center justify-center rounded-[11px] bg-[#1b4332] text-xl font-bold text-white shadow-sm">
-        R
-      </span>
-      <span className="font-heading text-[25px] font-bold tracking-[-0.06em] text-[#163e2e]">
-        Room<span className="text-[#ba6548]">ify</span>
-      </span>
-    </Link>
-  )
-}
-
 export function HeaderClient({ user }: { user: HeaderUser | null }) {
+  const pathname = usePathname()
   const [open, setOpen] = useState(false)
+  const { resolvedTheme, setTheme } = useTheme()
+  const links = [
+    { href: "/rooms", label: "Explore rooms", icon: BedDouble },
+    ...(user?.role === "GUEST"
+      ? [{ href: "/bookings", label: "My bookings", icon: CalendarDays }]
+      : []),
+    ...(user && user.role !== "GUEST"
+      ? [
+          { href: "/staff", label: "Overview", icon: LayoutDashboard },
+          { href: "/staff/bookings", label: "Bookings", icon: CalendarDays },
+          {
+            href: "/staff/room-service",
+            label: "Room service",
+            icon: UtensilsCrossed,
+          },
+        ]
+      : []),
+    ...(user?.role === "ADMIN"
+      ? [{ href: "/admin", label: "Administration", icon: Settings2 }]
+      : []),
+  ]
+  const nav = (mobile = false) => (
+    <nav
+      aria-label={mobile ? "Mobile navigation" : "Main navigation"}
+      className={mobile ? "grid gap-2" : "hidden items-center gap-1 xl:flex"}
+    >
+      {links.map(({ href, label, icon: Icon }) => {
+        const active =
+          pathname === href ||
+          (href !== "/staff" &&
+            href !== "/admin" &&
+            pathname.startsWith(href + "/")) ||
+          (href === "/admin" && pathname.startsWith("/admin"))
+        return (
+          <Link
+            key={href}
+            href={href}
+            onClick={() => setOpen(false)}
+            aria-current={active ? "page" : undefined}
+            className={cn(
+              buttonVariants({
+                variant: active ? "secondary" : "ghost",
+                size: "sm",
+              }),
+              mobile && "h-11 justify-start"
+            )}
+          >
+            <Icon className="size-4" />
+            {label}
+          </Link>
+        )
+      })}
+    </nav>
+  )
   return (
-    <header className="relative z-20 border-b border-[#e7e5e0] bg-[#faf9f6]/95 backdrop-blur">
-      <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between px-5 sm:px-8">
-        <Brand />
-        <nav
-          className="hidden items-center gap-8 text-sm font-medium text-[#475569] lg:flex"
-          aria-label="Main navigation"
+    <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-background focus:p-3"
+      >
+        Skip to content
+      </a>
+      <div className="mx-auto flex h-18 max-w-7xl items-center justify-between gap-4 px-5 sm:px-8">
+        <Link
+          href="/"
+          aria-label="Roomify home"
+          className="flex shrink-0 items-center gap-2.5"
         >
-          <Link className="text-[#1b4332]" href="/#stay">
-            Find a stay
-          </Link>
-          <Link
-            className="transition-colors hover:text-[#1b4332]"
-            href="/#rooms"
+          <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+            <BedDouble className="size-5" />
+          </span>
+          <span className="font-heading text-xl font-bold tracking-tight">
+            Roomify<span className="text-primary">.</span>
+          </span>
+        </Link>
+        {nav()}
+        <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            aria-label="Toggle color theme"
+            onClick={() =>
+              setTheme(resolvedTheme === "dark" ? "light" : "dark")
+            }
           >
-            Rooms
-          </Link>
-          <Link
-            className="transition-colors hover:text-[#1b4332]"
-            href="/#experience"
-          >
-            The Roomify experience
-          </Link>
-        </nav>
-        <div className="hidden items-center gap-4 lg:flex">
+            <Sun className="size-4 dark:hidden" />
+            <Moon className="hidden size-4 dark:block" />
+          </Button>
           {user ? (
-            <AuthenticatedNavigation user={user} />
+            <>
+              <div className="hidden border-l pl-3 text-right text-sm lg:block">
+                <p className="max-w-32 truncate font-medium">{user.name}</p>
+                <p className="text-xs text-muted-foreground capitalize">
+                  {user.role.toLowerCase()}
+                </p>
+              </div>
+              <form action={logoutAction} className="hidden xl:block">
+                <Button
+                  type="submit"
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Sign out"
+                >
+                  <LogOut />
+                </Button>
+              </form>
+            </>
           ) : (
-            <PublicNavigation />
-          )}
-        </div>
-        <button
-          className="rounded-lg p-2 text-[#1b4332] focus-visible:ring-2 focus-visible:ring-[#1b4332]/30 focus-visible:outline-none lg:hidden"
-          onClick={() => setOpen(!open)}
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-        >
-          {open ? <X size={23} /> : <Menu size={23} />}
-        </button>
-      </div>
-      {open && (
-        <nav
-          className="border-t border-[#e7e5e0] px-5 py-4 lg:hidden"
-          aria-label="Mobile navigation"
-        >
-          <div className="flex flex-col gap-4 text-sm font-medium text-[#475569]">
-            <Link href="/#stay" onClick={() => setOpen(false)}>
-              Find a stay
-            </Link>
-            <Link href="/#rooms" onClick={() => setOpen(false)}>
-              Rooms
-            </Link>
-            <Link href="/#experience" onClick={() => setOpen(false)}>
-              The Roomify experience
-            </Link>
-            <div className="flex flex-col gap-3 border-t border-[#e7e5e0] pt-4">
-              {user ? (
-                <AuthenticatedNavigation user={user} />
-              ) : (
-                <PublicNavigation />
+            <Link
+              href="/login"
+              className={cn(
+                buttonVariants({ variant: "outline" }),
+                "hidden sm:inline-flex"
               )}
-            </div>
-          </div>
-        </nav>
-      )}
-    </header>
-  )
-}
-
-function PublicNavigation() {
-  return (
-    <>
-      <Link
-        className="text-sm font-medium text-[#475569] hover:text-[#1b4332]"
-        href="/login"
-      >
-        Sign in
-      </Link>
-      <Link
-        className="rounded-lg bg-[#1b4332] px-5 py-3 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-[#2d6a4f] focus-visible:ring-4 focus-visible:ring-[#1b4332]/20 focus-visible:outline-none"
-        href="/register"
-      >
-        Create account
-      </Link>
-    </>
-  )
-}
-
-function AuthenticatedNavigation({ user }: { user: HeaderUser }) {
-  return (
-    <>
-      <div className="leading-tight">
-        <p className="text-sm font-semibold text-[#163e2e]">{user.name}</p>
-        <p className="mt-0.5 text-[11px] font-semibold tracking-wide text-[#94a3b8] uppercase">
-          {user.role.toLowerCase()}
-        </p>
+            >
+              Sign in
+            </Link>
+          )}
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger
+              render={
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  className="xl:hidden"
+                  aria-label="Open navigation"
+                />
+              }
+            >
+              <Menu />
+            </SheetTrigger>
+            <SheetContent className="w-[min(90vw,360px)]!">
+              <SheetHeader className="border-b p-6">
+                <SheetTitle>Roomify</SheetTitle>
+                <SheetDescription>
+                  {user
+                    ? "Your hotel workspace"
+                    : "Make room for a better stay."}
+                </SheetDescription>
+              </SheetHeader>
+              <div className="grid gap-6 px-4">
+                {nav(true)}
+                {user ? (
+                  <div className="space-y-4 border-t pt-4">
+                    <div className="flex items-center justify-between gap-2 px-2">
+                      <span className="truncate font-medium">{user.name}</span>
+                      <Badge variant="secondary">
+                        {user.role.toLowerCase()}
+                      </Badge>
+                    </div>
+                    <form action={logoutAction}>
+                      <Button
+                        type="submit"
+                        variant="outline"
+                        className="w-full"
+                      >
+                        <LogOut /> Sign out
+                      </Button>
+                    </form>
+                  </div>
+                ) : (
+                  <div className="grid gap-2">
+                    <Link
+                      onClick={() => setOpen(false)}
+                      href="/login"
+                      className={buttonVariants({ variant: "outline" })}
+                    >
+                      Sign in
+                    </Link>
+                    <Link
+                      onClick={() => setOpen(false)}
+                      href="/register"
+                      className={buttonVariants()}
+                    >
+                      Create account
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
-      {user.role === "GUEST" ? (
-        <span
-          className="text-sm text-[#64748b]"
-          aria-label="My bookings coming soon"
-        >
-          My bookings
-        </span>
-      ) : null}
-      <form action={logoutAction}>
-        <button
-          type="submit"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-[#2d6a4f] hover:text-[#1b4332] focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[#1b4332]/30 focus-visible:outline-none"
-        >
-          <LogOut size={15} /> Logout
-        </button>
-      </form>
-    </>
+    </header>
   )
 }

@@ -1,8 +1,8 @@
 import "server-only"
 
 import { randomUUID } from "node:crypto"
-import { and, eq, sql } from "drizzle-orm"
-import { bookings, rooms } from "@/db/schema"
+import { and, desc, eq, inArray, sql } from "drizzle-orm"
+import { bookings, rooms, users } from "@/db/schema"
 import { parseRoomSearch } from "@/lib/room-search"
 import { getRoomById } from "./rooms"
 
@@ -144,3 +144,87 @@ export async function getGuestBookingById(id: string, guestId: string) {
 export type GuestBookingDetails = NonNullable<
   Awaited<ReturnType<typeof getGuestBookingById>>
 >
+
+const guestBookingSelection = {
+  id: bookings.id,
+  guestId: bookings.guestId,
+  roomId: bookings.roomId,
+  checkIn: bookings.checkIn,
+  checkOut: bookings.checkOut,
+  status: bookings.status,
+  totalAmount: bookings.totalAmount,
+  createdAt: bookings.createdAt,
+  roomNumber: rooms.roomNumber,
+  roomType: rooms.type,
+  roomDescription: rooms.description,
+  roomImageUrl: rooms.imageUrl,
+}
+
+export async function getGuestBookings(guestId: string) {
+  const { db } = await import("@/db")
+  return db
+    .select(guestBookingSelection)
+    .from(bookings)
+    .innerJoin(rooms, eq(bookings.roomId, rooms.id))
+    .where(eq(bookings.guestId, guestId))
+    .orderBy(desc(bookings.checkIn), desc(bookings.createdAt))
+}
+
+export async function getStaffBookingById(id: string) {
+  const { db } = await import("@/db")
+  const [booking] = await db
+    .select({
+      ...guestBookingSelection,
+      guestName: users.name,
+      guestEmail: users.email,
+    })
+    .from(bookings)
+    .innerJoin(rooms, eq(bookings.roomId, rooms.id))
+    .innerJoin(users, eq(bookings.guestId, users.id))
+    .where(eq(bookings.id, id))
+    .limit(1)
+  return booking ?? null
+}
+
+export async function cancelGuestBooking(id: string, guestId: string) {
+  const { db } = await import("@/db")
+  const [booking] = await db
+    .update(bookings)
+    .set({ status: "CANCELLED", updatedAt: new Date() })
+    .where(
+      and(
+        eq(bookings.id, id),
+        eq(bookings.guestId, guestId),
+        inArray(bookings.status, ["PENDING", "CONFIRMED"]),
+        sql`${bookings.checkIn}::date > current_date`
+      )
+    )
+    .returning({ id: bookings.id })
+  return booking ?? null
+}
+
+export async function getStaffBookings(filters?: {
+  query?: string
+  status?: (typeof bookings.status.enumValues)[number]
+}) {
+  const { db } = await import("@/db")
+  const conditions = []
+  if (filters?.status) conditions.push(eq(bookings.status, filters.status))
+  if (filters?.query) {
+    const query = `%${filters.query}%`
+    conditions.push(
+      sql`(${rooms.roomNumber} ilike ${query} or cast(${bookings.id} as text) ilike ${query} or cast(${bookings.guestId} as text) ilike ${query} or ${users.name} ilike ${query} or ${users.email} ilike ${query})`
+    )
+  }
+  return db
+    .select({
+      ...guestBookingSelection,
+      guestName: users.name,
+      guestEmail: users.email,
+    })
+    .from(bookings)
+    .innerJoin(rooms, eq(bookings.roomId, rooms.id))
+    .innerJoin(users, eq(bookings.guestId, users.id))
+    .where(conditions.length ? and(...conditions) : undefined)
+    .orderBy(desc(bookings.checkIn), desc(bookings.createdAt))
+}

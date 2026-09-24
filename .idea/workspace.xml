@@ -5,17 +5,39 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1b08f90b-7249-4e15-8f63-aadde284d4f1" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AGENTS.md" beforeDir="false" afterPath="$PROJECT_DIR$/AGENTS.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/bookings/[id]/confirmation/not-found.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/bookings/[id]/confirmation/not-found.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/bookings/[id]/confirmation/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/bookings/[id]/confirmation/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/bookings/new/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/bookings/new/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/globals.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/rooms/[id]/not-found.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/rooms/[id]/not-found.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/rooms/[id]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/rooms/[id]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/rooms/loading.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/rooms/loading.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/rooms/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/rooms/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/unauthorized/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/unauthorized/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/auth/AuthField.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/auth/AuthField.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/auth/AuthShell.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/auth/AuthShell.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/auth/LoginForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/auth/LoginForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/auth/RegisterForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/auth/RegisterForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/auth/SubmitButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/auth/SubmitButton.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/bookings/ConfirmBookingForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/bookings/ConfirmBookingForm.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/home/BookingSearch.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/home/BookingSearch.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/home/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/home/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/home/FeaturedRooms.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/home/FeaturedRooms.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/home/Footer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/home/Footer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/home/HeaderClient.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/home/HeaderClient.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/home/RoomCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/home/RoomCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/rooms/StaySummary.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/rooms/StaySummary.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/theme-provider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/theme-provider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ui/button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/ui/button.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/bookings.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/data/bookings.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/bookings.ts" beforeDir="false" afterPath="$PROJECT_DIR$/data/bookings.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/rooms.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/data/rooms.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/rooms.ts" beforeDir="false" afterPath="$PROJECT_DIR$/data/rooms.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pnpm-workspace.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-workspace.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +92,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "to.speed.mode.migration.done": "true",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2025.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external"
+    "ts.external.directory.path": "C:\\workspace\\BYU\\cse499\\Roomify\\node_modules\\typescript\\lib"
   }
 }]]></component>
   <component name="ReactDesignerToolWindowState">
@@ -84,6 +106,19 @@
   </component>
   <component name="RunManager" selected="npm.Next.js: server-side">
     <configuration name="Next.js: debug client-side" type="JavascriptDebugType" uri="http://localhost:3000/">
+      <method v="2" />
+    </configuration>
+    <configuration name="Next.js: debug client-side" type="JavascriptDebugType" uri="http://localhost:3000/">
+      <method v="2" />
+    </configuration>
+    <configuration name="Next.js: server-side" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
       <method v="2" />
     </configuration>
     <configuration name="Next.js: server-side" type="js.build_tools.npm">
@@ -100,7 +135,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-WS-262.10315.144" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-WS-262.10968.77" />
       </set>
     </attachedChunks>
   </component>
@@ -115,7 +150,10 @@
       <workItem from="1789201664536" duration="19000" />
       <workItem from="1789398814802" duration="6235000" />
       <workItem from="1789672881326" duration="2689000" />
-      <workItem from="1789728580966" duration="11231000" />
+      <workItem from="1789728580966" duration="19000000" />
+      <workItem from="1790108012041" duration="224000" />
+      <workItem from="1790180129410" duration="4243000" />
+      <workItem from="1790237653219" duration="1610000" />
     </task>
     <servers />
   </component>

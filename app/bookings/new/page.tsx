@@ -1,3 +1,5 @@
+import { Card } from "@/components/ui/card"
+import { LinkButton } from "@/components/ui/link-button"
 import Link from "next/link"
 import { ArrowLeft, CalendarDays, ShieldCheck, Users } from "lucide-react"
 import { ConfirmBookingForm } from "@/components/bookings/ConfirmBookingForm"
@@ -121,35 +123,38 @@ export default async function BookingReviewPage({
   const searchHref = `/rooms?${roomQuery}`
 
   return (
-    <div className="min-h-screen bg-[#faf9f6] text-[#0f172a]">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
-      <main className="mx-auto min-h-[70vh] max-w-6xl px-5 py-8 sm:px-8 lg:py-12">
+      <main
+        id="main-content"
+        className="mx-auto min-h-[70vh] max-w-6xl px-5 py-8 sm:px-8 lg:py-12"
+      >
         <Link
           href={roomHref}
-          className="inline-flex items-center gap-2 text-sm font-medium text-[#64748b] hover:text-[#1b4332] focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[#1b4332]/30 focus-visible:outline-none"
+          className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary focus-visible:rounded focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:outline-none"
         >
           <ArrowLeft size={16} /> Back to room
         </Link>
         <div className="mt-6">
-          <p className="text-xs font-bold tracking-[0.18em] text-[#ba6548] uppercase">
+          <p className="text-xs font-bold tracking-[0.18em] text-muted-foreground uppercase">
             Final review
           </p>
-          <h1 className="mt-2 font-heading text-3xl font-bold tracking-[-0.04em] text-[#163e2e] sm:text-4xl">
+          <h1 className="mt-2 font-heading text-3xl font-bold tracking-[-0.04em] text-foreground sm:text-4xl">
             Review your reservation
           </h1>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-[#64748b]">
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
             Confirm the room, stay, and guest details below. Availability and
             pricing will be checked once more when you confirm.
           </p>
         </div>
 
         <div className="mt-8 grid gap-7 lg:grid-cols-[minmax(0,1.35fr)_minmax(340px,0.75fr)] lg:items-start">
-          <section
-            className="overflow-hidden rounded-2xl border border-[#e7e5e0] bg-white shadow-sm"
+          <Card
+            className="gap-0 overflow-hidden py-0"
             aria-labelledby="room-review-heading"
           >
             <div className="grid sm:grid-cols-[minmax(220px,0.8fr)_1.2fr]">
-              <div className="group relative aspect-[16/10] min-h-56 overflow-hidden bg-[#e8ebe8] sm:aspect-auto">
+              <div className="group relative aspect-[16/10] min-h-56 overflow-hidden bg-muted sm:aspect-auto">
                 <RoomImage
                   src={room.imageUrl}
                   fallback={getRoomImageFallback(room.type)}
@@ -158,16 +163,16 @@ export default async function BookingReviewPage({
                 />
               </div>
               <div className="p-6 sm:p-7">
-                <p className="text-xs font-bold tracking-[0.16em] text-[#ba6548] uppercase">
+                <p className="text-xs font-bold tracking-[0.16em] text-muted-foreground uppercase">
                   Room {room.roomNumber}
                 </p>
                 <h2
                   id="room-review-heading"
-                  className="mt-2 font-heading text-2xl font-semibold text-[#163e2e]"
+                  className="mt-2 font-heading text-2xl font-semibold text-foreground"
                 >
                   {roomName}
                 </h2>
-                <p className="mt-3 text-sm leading-6 text-[#64748b]">
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
                   {room.description}
                 </p>
                 <dl className="mt-6 grid grid-cols-2 gap-4 text-sm">
@@ -183,13 +188,13 @@ export default async function BookingReviewPage({
                 </dl>
               </div>
             </div>
-          </section>
+          </Card>
 
-          <aside className="rounded-2xl border border-[#e7e5e0] bg-white p-6 shadow-[0_12px_30px_rgba(27,67,50,0.08)] lg:sticky lg:top-6">
-            <h2 className="font-heading text-xl font-semibold text-[#163e2e]">
+          <aside className="rounded-2xl border border-border bg-card p-6 shadow-sm lg:sticky lg:top-24">
+            <h2 className="font-heading text-xl font-semibold text-foreground">
               Booking summary
             </h2>
-            <dl className="mt-5 grid grid-cols-2 gap-5 border-b border-[#f1f0ea] pb-5 text-sm">
+            <dl className="mt-5 grid grid-cols-2 gap-5 border-b border-border pb-5 text-sm">
               <Detail
                 label="Check-in"
                 value={formatDate(context.data.checkIn)}
@@ -211,31 +216,30 @@ export default async function BookingReviewPage({
               />
             </dl>
             <div className="mt-5 space-y-3 text-sm">
-              <div className="flex justify-between gap-4 text-[#64748b]">
+              <div className="flex justify-between gap-4 text-muted-foreground">
                 <span>
                   ${displayMoney(room.baseRate)} × {context.data.nights} nights
                 </span>
-                <span className="font-medium text-[#334155]">
+                <span className="font-medium text-foreground">
                   ${multiplyMoney(room.baseRate, context.data.nights)}
                 </span>
               </div>
-              <div className="flex justify-between gap-4 border-t border-[#f1f0ea] pt-3 font-semibold text-[#163e2e]">
+              <div className="flex justify-between gap-4 border-t border-border pt-3 font-semibold text-foreground">
                 <span>Room total</span>
                 <span>
                   ${multiplyMoney(room.baseRate, context.data.nights)}
                 </span>
               </div>
             </div>
-            <div className="mt-5 rounded-xl bg-[#f4f3ee] p-4 text-sm">
-              <p className="font-semibold text-[#163e2e]">Guest</p>
-              <p className="mt-1 text-[#334155]">{user.name}</p>
-              <p className="mt-0.5 break-all text-[#64748b]">{user.email}</p>
+            <div className="mt-5 rounded-xl bg-muted p-4 text-sm">
+              <p className="font-semibold text-foreground">Guest</p>
+              <p className="mt-1 text-foreground">{user.name}</p>
+              <p className="mt-0.5 break-all text-muted-foreground">
+                {user.email}
+              </p>
             </div>
-            <div className="mt-4 flex items-start gap-2 text-xs leading-5 text-[#64748b]">
-              <ShieldCheck
-                size={17}
-                className="mt-0.5 shrink-0 text-[#2d6a4f]"
-              />
+            <div className="mt-4 flex items-start gap-2 text-xs leading-5 text-muted-foreground">
+              <ShieldCheck size={17} className="mt-0.5 shrink-0 text-primary" />
               <p>
                 Room rate, capacity, dates, availability, and total are
                 recalculated on the server.
@@ -267,11 +271,11 @@ function Detail({
 }) {
   return (
     <div>
-      <dt className="flex items-center gap-2 text-xs font-semibold tracking-wide text-[#94a3b8] uppercase">
+      <dt className="flex items-center gap-2 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
         {icon ? <span aria-hidden="true">{icon}</span> : null}
         {label}
       </dt>
-      <dd className="mt-1.5 font-medium text-[#334155]">{value}</dd>
+      <dd className="mt-1.5 font-medium text-foreground">{value}</dd>
     </div>
   )
 }
@@ -286,28 +290,29 @@ function ReviewIssue({
   searchQuery?: string
 }) {
   return (
-    <div className="min-h-screen bg-[#faf9f6]">
+    <div className="min-h-screen bg-background">
       <Header />
-      <main className="mx-auto flex min-h-[70vh] max-w-3xl items-center px-5 py-16 sm:px-8">
-        <div
-          role="alert"
-          className="w-full rounded-2xl border border-[#e7e5e0] bg-white p-8 text-center shadow-sm"
-        >
-          <h1 className="font-heading text-3xl font-bold text-[#163e2e]">
+      <main
+        id="main-content"
+        className="mx-auto flex min-h-[70vh] max-w-3xl items-center px-5 py-16 sm:px-8"
+      >
+        <Card role="alert" className="w-full gap-0 p-8 py-0 text-center">
+          <h1 className="font-heading text-3xl font-bold text-foreground">
             {title}
           </h1>
-          <ul className="mx-auto mt-3 max-w-lg space-y-1 text-sm leading-6 text-[#64748b]">
+          <ul className="mx-auto mt-3 max-w-lg space-y-1 text-sm leading-6 text-muted-foreground">
             {messages.map((message) => (
               <li key={message}>{message}</li>
             ))}
           </ul>
-          <Link
+          <LinkButton
             href={`/rooms${searchQuery ? `?${searchQuery}` : ""}`}
-            className="mt-6 inline-flex rounded-lg bg-[#1b4332] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2d6a4f]"
+            variant="default"
+            className="mt-6"
           >
             Search rooms
-          </Link>
-        </div>
+          </LinkButton>
+        </Card>
       </main>
       <Footer />
     </div>

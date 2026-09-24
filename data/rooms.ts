@@ -115,6 +115,32 @@ export async function getAvailableRooms(criteria: RoomSearchCriteria) {
     .orderBy(asc(rooms.baseRate), asc(rooms.roomNumber))
 }
 
+export async function getBrowseRooms(filters?: {
+  guests?: number
+  roomType?: RoomSearchCriteria["roomType"]
+}) {
+  const { db } = await import("@/db")
+  const conditions = [ne(rooms.status, "NEEDS_CLEANING")]
+  if (filters?.guests) conditions.push(gte(rooms.capacity, filters.guests))
+  if (filters?.roomType) conditions.push(eq(rooms.type, filters.roomType))
+
+  return db
+    .select({
+      id: rooms.id,
+      roomNumber: rooms.roomNumber,
+      type: rooms.type,
+      description: rooms.description,
+      capacity: rooms.capacity,
+      baseRate: rooms.baseRate,
+      imageUrl: rooms.imageUrl,
+    })
+    .from(rooms)
+    .where(and(...conditions))
+    .orderBy(asc(rooms.baseRate), asc(rooms.roomNumber))
+}
+
+export type BrowseRoom = Awaited<ReturnType<typeof getBrowseRooms>>[number]
+
 export type AvailableRoom = Awaited<
   ReturnType<typeof getAvailableRooms>
 >[number]

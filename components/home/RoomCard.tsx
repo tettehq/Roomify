@@ -1,3 +1,4 @@
+import { Card } from "@/components/ui/card"
 import Link from "next/link"
 import { ArrowUpRight, BedDouble } from "lucide-react"
 import type { AvailableRoom, FeaturedRoom } from "@/data/rooms"
@@ -32,7 +33,10 @@ export function RoomCard({
       }).toString()
     : ""
   return (
-    <article className="group overflow-hidden rounded-2xl border border-[#e7e5e0] bg-white shadow-[0_1px_3px_rgba(27,67,50,0.04)] transition hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(27,67,50,0.1)]">
+    <Card
+      role="article"
+      className="group gap-0 overflow-hidden rounded-2xl border border-border bg-card py-0 shadow-sm ring-0 transition hover:-translate-y-1 hover:shadow-sm"
+    >
       <div className="relative aspect-[1.42] overflow-hidden">
         <RoomImage
           src={room.imageUrl}
@@ -43,29 +47,32 @@ export function RoomCard({
       <div className="p-5">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h3 className="font-heading text-lg font-semibold text-[#163e2e]">
+            <h3 className="font-heading text-lg font-semibold text-foreground">
               {name}
             </h3>
-            <p className="mt-2 text-sm leading-6 text-[#64748b]">
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">
               {room.description}
             </p>
           </div>
-          <BedDouble size={20} className="mt-1 shrink-0 text-[#ba6548]" />
+          <BedDouble
+            size={20}
+            className="mt-1 shrink-0 text-muted-foreground"
+          />
         </div>
-        <div className="mt-5 flex items-center justify-between border-t border-[#f1f0ea] pt-4">
+        <div className="mt-5 flex items-center justify-between border-t border-border pt-4">
           <div>
-            <span className="font-heading text-xl font-bold text-[#163e2e]">
+            <span className="font-heading text-xl font-bold text-foreground">
               ${price}
             </span>
-            <span className="text-xs text-[#94a3b8]"> / night</span>
-            <p className="mt-1 text-xs text-[#64748b]">
+            <span className="text-xs text-muted-foreground"> / night</span>
+            <p className="mt-1 text-xs text-muted-foreground">
               {room.capacity} {room.capacity === 1 ? "guest" : "guests"}
             </p>
             {stay && (
-              <p className="mt-2 text-xs leading-5 text-[#64748b]">
+              <p className="mt-2 text-xs leading-5 text-muted-foreground">
                 {stay.nights} {stay.nights === 1 ? "night" : "nights"}
                 <br />
-                <span className="font-semibold text-[#163e2e]">
+                <span className="font-semibold text-foreground">
                   Estimated stay: ${multiplyMoney(room.baseRate, stay.nights)}
                 </span>
               </p>
@@ -73,12 +80,12 @@ export function RoomCard({
           </div>
           <Link
             href={`/rooms/${room.id}${query ? `?${query}` : ""}`}
-            className="flex items-center gap-1 text-sm font-semibold text-[#2d6a4f] hover:text-[#1b4332]"
+            className="flex items-center gap-1 text-sm font-semibold text-primary hover:text-primary"
           >
             {stay ? "Select room" : "Explore"} <ArrowUpRight size={15} />
           </Link>
         </div>
       </div>
-    </article>
+    </Card>
   )
 }

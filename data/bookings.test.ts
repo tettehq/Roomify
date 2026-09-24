@@ -3,7 +3,11 @@ import test from "node:test"
 import { and, eq } from "drizzle-orm"
 import { db } from "../db"
 import { bookings } from "../db/schema"
-import { createGuestBooking, getGuestBookingById } from "./bookings"
+import {
+  cancelGuestBooking,
+  createGuestBooking,
+  getGuestBookingById,
+} from "./bookings"
 
 const GUEST_ID = "00000000-0000-4000-8000-000000000101"
 const OTHER_GUEST_ID = "00000000-0000-4000-8000-000000000102"
@@ -145,4 +149,29 @@ test("a seeded blocking booking is rejected at the final availability check", as
     },
   })
   assert.deepEqual(result, { success: false, reason: "UNAVAILABLE" })
+})
+
+test("a future guest booking can be cancelled without deleting it", async () => {
+  const stay = { checkIn: "2040-04-10", checkOut: "2040-04-13", guests: 2 }
+  let [record] = await exactBookings(
+    FAMILY_ROOM_ID,
+    stay.checkIn,
+    stay.checkOut
+  )
+  if (!record) {
+    const created = await createGuestBooking({
+      guestId: GUEST_ID,
+      roomId: FAMILY_ROOM_ID,
+      stay,
+    })
+    assert.equal(created.success, true)
+    ;[record] = await exactBookings(FAMILY_ROOM_ID, stay.checkIn, stay.checkOut)
+  }
+  assert.ok(record)
+  if (record.status !== "CANCELLED") {
+    const cancelled = await cancelGuestBooking(record.id, GUEST_ID)
+    assert.equal(cancelled?.id, record.id)
+  }
+  const persisted = await getGuestBookingById(record.id, GUEST_ID)
+  assert.equal(persisted?.status, "CANCELLED")
 })

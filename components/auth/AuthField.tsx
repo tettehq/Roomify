@@ -1,3 +1,5 @@
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 export function AuthField({
   id,
   label,
@@ -14,10 +16,10 @@ export function AuthField({
   const errorId = errors?.length ? `${id}-error` : undefined
   return (
     <div>
-      <label htmlFor={id} className="text-sm font-semibold text-[#334155]">
+      <Label htmlFor={id} className="text-sm font-semibold text-foreground">
         {label}
-      </label>
-      <input
+      </Label>
+      <Input
         id={id}
         name={id}
         type={type}
@@ -25,10 +27,10 @@ export function AuthField({
         required
         aria-invalid={Boolean(errors?.length)}
         aria-describedby={errorId}
-        className="mt-2 min-h-12 w-full rounded-lg border border-[#d7d9d5] bg-white px-3.5 text-sm text-[#0f172a] transition outline-none placeholder:text-[#94a3b8] focus:border-[#1b4332] focus:ring-3 focus:ring-[#1b4332]/12 aria-invalid:border-[#be123c] aria-invalid:ring-[#be123c]/10"
+        className="mt-2"
       />
       {errors?.length ? (
-        <ul id={errorId} className="mt-2 space-y-1 text-sm text-[#a13d32]">
+        <ul id={errorId} className="mt-2 space-y-1 text-sm text-destructive">
           {errors.map((error) => (
             <li key={error}>{error}</li>
           ))}

@@ -1,3 +1,5 @@
+import { LinkButton } from "@/components/ui/link-button"
+import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { AlertCircle, CalendarDays, Check, Users } from "lucide-react"
 import type { RoomDetails } from "@/data/rooms"
@@ -49,17 +51,17 @@ export function StaySummary({
     <aside
       id="stay-summary"
       aria-labelledby="stay-summary-heading"
-      className="rounded-2xl border border-[#e7e5e0] bg-white p-6 shadow-[0_12px_30px_rgba(27,67,50,0.08)] lg:sticky lg:top-6"
+      className="rounded-2xl border border-border bg-card p-6 shadow-sm lg:sticky lg:top-24"
     >
-      <div className="flex items-baseline justify-between gap-4 border-b border-[#f1f0ea] pb-5">
+      <div className="flex items-baseline justify-between gap-4 border-b border-border pb-5">
         <h2
           id="stay-summary-heading"
-          className="font-heading text-xl font-semibold text-[#163e2e]"
+          className="font-heading text-xl font-semibold text-foreground"
         >
           Stay summary
         </h2>
-        <p className="shrink-0 text-sm text-[#64748b]">
-          <span className="font-heading text-2xl font-bold text-[#163e2e]">
+        <p className="shrink-0 text-sm text-muted-foreground">
+          <span className="font-heading text-2xl font-bold text-foreground">
             ${displayMoney(room.baseRate)}
           </span>{" "}
           / night
@@ -90,28 +92,28 @@ export function StaySummary({
               value={`${context.data.nights} ${context.data.nights === 1 ? "night" : "nights"}`}
             />
           </dl>
-          <div className="mt-6 space-y-3 border-t border-[#f1f0ea] pt-5 text-sm">
-            <div className="flex justify-between gap-4 text-[#64748b]">
+          <div className="mt-6 space-y-3 border-t border-border pt-5 text-sm">
+            <div className="flex justify-between gap-4 text-muted-foreground">
               <span>
                 ${displayMoney(room.baseRate)} × {context.data.nights}{" "}
                 {context.data.nights === 1 ? "night" : "nights"}
               </span>
-              <span className="font-medium text-[#334155]">
+              <span className="font-medium text-foreground">
                 ${multiplyMoney(room.baseRate, context.data.nights)}
               </span>
             </div>
-            <div className="flex justify-between gap-4 border-t border-[#f1f0ea] pt-3 font-semibold text-[#163e2e]">
+            <div className="flex justify-between gap-4 border-t border-border pt-3 font-semibold text-foreground">
               <span>Estimated room subtotal</span>
               <span>${multiplyMoney(room.baseRate, context.data.nights)}</span>
             </div>
           </div>
         </>
       ) : (
-        <div className="mt-5 rounded-xl bg-[#f4f3ee] p-4">
-          <p className="text-sm font-semibold text-[#163e2e]">
+        <div className="mt-5 rounded-xl bg-muted p-4">
+          <p className="text-sm font-semibold text-foreground">
             Select your stay before reserving
           </p>
-          <p className="mt-1 text-sm leading-6 text-[#64748b]">
+          <p className="mt-1 text-sm leading-6 text-muted-foreground">
             Choose valid check-in and check-out dates and at least one guest.
           </p>
         </div>
@@ -120,12 +122,12 @@ export function StaySummary({
       {context.state === "invalid" && (
         <div
           role="alert"
-          className="mt-4 rounded-xl border border-[#f0c9ba] bg-[#fff8f5] p-4"
+          className="mt-4 rounded-xl border border-destructive/25 bg-destructive/5 p-4"
         >
-          <p className="flex items-center gap-2 text-sm font-semibold text-[#7a321d]">
+          <p className="flex items-center gap-2 text-sm font-semibold text-destructive">
             <AlertCircle size={17} /> Check your stay details
           </p>
-          <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-[#8b4b38]">
+          <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-destructive">
             {context.errors.map((error) => (
               <li key={error}>{error}</li>
             ))}
@@ -157,27 +159,24 @@ export function StaySummary({
       )}
 
       {canReserve && (!viewerRole || viewerRole === "GUEST") ? (
-        <Link
+        <LinkButton
           href={reserveHref}
-          className="mt-6 flex min-h-12 w-full items-center justify-center rounded-xl bg-[#1b4332] px-5 text-sm font-semibold text-white transition hover:bg-[#2d6a4f] focus-visible:ring-4 focus-visible:ring-[#1b4332]/20 focus-visible:outline-none"
+          variant="default"
+          className="mt-6 min-h-12 w-full"
         >
           Reserve room
-        </Link>
+        </LinkButton>
       ) : (
-        <button
-          type="button"
-          disabled
-          className="mt-6 flex min-h-12 w-full items-center justify-center rounded-xl bg-[#d8ddd9] px-5 text-sm font-semibold text-[#66756d]"
-        >
+        <Button type="button" disabled className="mt-6 w-full">
           Reserve room
-        </button>
+        </Button>
       )}
-      <p className="mt-3 text-center text-xs leading-5 text-[#94a3b8]">
+      <p className="mt-3 text-center text-xs leading-5 text-muted-foreground">
         No charge is made at this step. Taxes and fees are not yet included.
       </p>
       <Link
         href={searchHref}
-        className="mt-4 block text-center text-sm font-semibold text-[#2d6a4f] hover:text-[#1b4332] focus-visible:rounded focus-visible:ring-2 focus-visible:ring-[#1b4332]/30 focus-visible:outline-none"
+        className="mt-4 block text-center text-sm font-semibold text-primary hover:text-primary focus-visible:rounded focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:outline-none"
       >
         Back to available rooms
       </Link>
@@ -196,10 +195,10 @@ function SummaryItem({
 }) {
   return (
     <div>
-      <dt className="flex items-center gap-2 text-xs font-semibold tracking-wide text-[#94a3b8] uppercase">
+      <dt className="flex items-center gap-2 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
         <span aria-hidden="true">{icon}</span> {label}
       </dt>
-      <dd className="mt-1.5 font-medium text-[#334155]">{value}</dd>
+      <dd className="mt-1.5 font-medium text-foreground">{value}</dd>
     </div>
   )
 }
@@ -208,7 +207,7 @@ function StatusMessage({ children }: { children: React.ReactNode }) {
   return (
     <p
       role="alert"
-      className="mt-4 rounded-xl border border-[#f0c9ba] bg-[#fff8f5] p-4 text-sm leading-6 text-[#7a321d]"
+      className="mt-4 rounded-xl border border-destructive/25 bg-destructive/5 p-4 text-sm leading-6 text-destructive"
     >
       {children}
     </p>

@@ -1,4 +1,7 @@
-import Link from "next/link"
+import { Card } from "@/components/ui/card"
+import { LinkButton } from "@/components/ui/link-button"
+import { StatusBadge } from "@/components/ui/status-badge"
+
 import { CalendarDays, CheckCircle2, Home, Users } from "lucide-react"
 import { notFound } from "next/navigation"
 import { Footer } from "@/components/home/Footer"
@@ -44,16 +47,19 @@ export default async function BookingConfirmationPage({
   )
 
   return (
-    <div className="min-h-screen bg-[#faf9f6] text-[#0f172a]">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
-      <main className="mx-auto min-h-[70vh] max-w-4xl px-5 py-10 sm:px-8 lg:py-16">
-        <section
+      <main
+        id="main-content"
+        className="mx-auto min-h-[70vh] max-w-4xl px-5 py-10 sm:px-8 lg:py-16"
+      >
+        <Card
           aria-labelledby="confirmation-heading"
-          className="overflow-hidden rounded-2xl border border-[#dce7df] bg-white shadow-[0_18px_45px_rgba(27,67,50,0.1)]"
+          className="gap-0 overflow-hidden py-0"
         >
-          <div className="bg-[#1b4332] px-6 py-9 text-center text-white sm:px-10">
+          <div className="bg-primary px-6 py-9 text-center text-primary-foreground sm:px-10">
             <CheckCircle2 className="mx-auto" size={44} aria-hidden="true" />
-            <p className="mt-4 text-xs font-bold tracking-[0.18em] text-[#d8eee1] uppercase">
+            <p className="mt-4 text-xs font-bold tracking-[0.18em] text-primary-foreground uppercase">
               Booking confirmed
             </p>
             <h1
@@ -62,13 +68,13 @@ export default async function BookingConfirmationPage({
             >
               Your reservation is confirmed
             </h1>
-            <p className="mt-3 text-sm text-[#d8eee1]">
+            <p className="mt-3 text-sm text-primary-foreground">
               We look forward to welcoming you, {user.name}.
             </p>
           </div>
 
           <div className="grid md:grid-cols-[minmax(240px,0.85fr)_1.15fr]">
-            <div className="relative min-h-64 overflow-hidden bg-[#e8ebe8]">
+            <div className="relative min-h-64 overflow-hidden bg-muted">
               <RoomImage
                 src={booking.roomImageUrl}
                 fallback={getRoomImageFallback(booking.roomType)}
@@ -77,17 +83,17 @@ export default async function BookingConfirmationPage({
               />
             </div>
             <div className="p-6 sm:p-8">
-              <p className="text-xs font-bold tracking-[0.16em] text-[#ba6548] uppercase">
+              <p className="text-xs font-bold tracking-[0.16em] text-muted-foreground uppercase">
                 Room {booking.roomNumber}
               </p>
-              <h2 className="mt-2 font-heading text-2xl font-semibold text-[#163e2e]">
+              <h2 className="mt-2 font-heading text-2xl font-semibold text-foreground">
                 {roomName}
               </h2>
-              <p className="mt-2 text-sm leading-6 text-[#64748b]">
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
                 {booking.roomDescription}
               </p>
 
-              <dl className="mt-6 grid gap-5 border-y border-[#f1f0ea] py-5 sm:grid-cols-2">
+              <dl className="mt-6 grid gap-5 border-y border-border py-5 sm:grid-cols-2">
                 <ConfirmationDetail
                   label="Check-in"
                   value={formatDate(booking.checkIn)}
@@ -111,38 +117,30 @@ export default async function BookingConfirmationPage({
 
               <div className="mt-5 flex items-end justify-between gap-4">
                 <div>
-                  <p className="text-xs font-semibold tracking-wide text-[#94a3b8] uppercase">
+                  <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                     Reservation total
                   </p>
-                  <p className="mt-1 font-heading text-2xl font-bold text-[#163e2e]">
+                  <p className="mt-1 font-heading text-2xl font-bold text-foreground">
                     ${displayMoney(booking.totalAmount)}
                   </p>
                 </div>
-                <span className="rounded-full bg-[#e8f3ec] px-3 py-1.5 text-xs font-bold tracking-wide text-[#276044] uppercase">
-                  {booking.status.replaceAll("_", " ")}
-                </span>
+                <StatusBadge status={booking.status} />
               </div>
-              <p className="mt-5 rounded-xl bg-[#f4f3ee] p-4 text-xs leading-5 break-all text-[#64748b]">
+              <p className="mt-5 rounded-xl bg-muted p-4 text-xs leading-5 break-all text-muted-foreground">
                 Booking reference:{" "}
-                <strong className="text-[#334155]">{booking.id}</strong>
+                <strong className="text-foreground">{booking.id}</strong>
               </p>
             </div>
           </div>
-        </section>
+        </Card>
 
         <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-          <Link
-            href="/rooms"
-            className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#1b4332] px-6 text-sm font-semibold text-white hover:bg-[#2d6a4f]"
-          >
+          <LinkButton href="/rooms" variant="default" className="min-h-12">
             Browse more rooms
-          </Link>
-          <Link
-            href="/"
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-[#d7ddd8] bg-white px-6 text-sm font-semibold text-[#1b4332] hover:bg-[#f4f3ee]"
-          >
+          </LinkButton>
+          <LinkButton href="/" variant="outline" className="min-h-12">
             <Home size={16} /> Return home
-          </Link>
+          </LinkButton>
         </div>
       </main>
       <Footer />
@@ -161,11 +159,11 @@ function ConfirmationDetail({
 }) {
   return (
     <div>
-      <dt className="flex items-center gap-2 text-xs font-semibold tracking-wide text-[#94a3b8] uppercase">
+      <dt className="flex items-center gap-2 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
         {icon ? <span aria-hidden="true">{icon}</span> : null}
         {label}
       </dt>
-      <dd className="mt-1.5 font-medium text-[#334155]">{value}</dd>
+      <dd className="mt-1.5 font-medium text-foreground">{value}</dd>
     </div>
   )
 }

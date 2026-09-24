@@ -3,7 +3,12 @@ import test from "node:test"
 import { eq } from "drizzle-orm"
 import { db } from "../db"
 import { bookings } from "../db/schema"
-import { getAvailableRooms, getRoomById, isRoomAvailable } from "./rooms"
+import {
+  getAvailableRooms,
+  getBrowseRooms,
+  getRoomById,
+  isRoomAvailable,
+} from "./rooms"
 import type { RoomSearchCriteria } from "../lib/room-search"
 
 const SEEDED_BOOKINGS = {
@@ -112,6 +117,23 @@ test("a room can be loaded by its seeded UUID", async () => {
 test("an unknown UUID returns no room", async () => {
   const room = await getRoomById("ffffffff-ffff-4fff-8fff-ffffffffffff")
   assert.equal(room, null)
+})
+
+test("room browsing works without dates and applies only browse filters", async () => {
+  const allRooms = await getBrowseRooms()
+  assert.ok(allRooms.length > 0)
+  assert.ok(allRooms.some((room) => room.roomNumber === "101"))
+
+  const familyRooms = await getBrowseRooms({
+    guests: 4,
+    roomType: "FAMILY_SUITE",
+  })
+  assert.ok(familyRooms.length > 0)
+  assert.ok(
+    familyRooms.every(
+      (room) => room.capacity >= 4 && room.type === "FAMILY_SUITE"
+    )
+  )
 })
 
 test("specific room availability rejects an overlapping confirmed booking", async () => {

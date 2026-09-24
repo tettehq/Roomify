@@ -1,5 +1,7 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
+
 import Link from "next/link"
 import { useActionState } from "react"
 import {
@@ -37,27 +39,23 @@ export function ConfirmBookingForm({
         <div
           role="alert"
           aria-live="polite"
-          className="mb-4 rounded-xl border border-[#f0c9ba] bg-[#fff8f5] p-4 text-sm leading-6 text-[#7a321d]"
+          className="mb-4 rounded-xl border border-destructive/25 bg-destructive/5 p-4 text-sm leading-6 text-destructive"
         >
           <p>{state.message}</p>
           {state.code === "UNAVAILABLE" ? (
             <Link
               href={searchHref}
-              className="mt-2 inline-flex font-semibold text-[#2d6a4f] underline underline-offset-4"
+              className="mt-2 inline-flex font-semibold text-primary underline underline-offset-4"
             >
               Search other rooms
             </Link>
           ) : null}
         </div>
       ) : null}
-      <button
-        type="submit"
-        disabled={pending}
-        className="flex min-h-12 w-full items-center justify-center rounded-xl bg-[#1b4332] px-5 text-sm font-semibold text-white transition hover:bg-[#2d6a4f] focus-visible:ring-4 focus-visible:ring-[#1b4332]/20 focus-visible:outline-none disabled:cursor-wait disabled:opacity-60"
-      >
+      <Button type="submit" disabled={pending} size="lg" className="w-full">
         {pending ? "Confirming reservation…" : "Confirm reservation"}
-      </button>
-      <p className="mt-3 text-center text-xs leading-5 text-[#94a3b8]">
+      </Button>
+      <p className="mt-3 text-center text-xs leading-5 text-muted-foreground">
         Your room and total are checked again securely before confirmation.
       </p>
     </form>

@@ -30,7 +30,7 @@ export function LoginForm({ returnTo }: { returnTo: string }) {
       {state.message ? (
         <p
           role="alert"
-          className="rounded-lg border border-[#f0c9ba] bg-[#fff8f5] p-3 text-sm text-[#8b4b38]"
+          className="rounded-lg border border-destructive/25 bg-destructive/5 p-3 text-sm text-destructive"
         >
           {state.message}
         </p>
