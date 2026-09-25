@@ -1,15 +1,18 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionState, useState } from "react"
 import { registerAction } from "@/app/actions/auth"
 import type { AuthActionState } from "@/lib/auth/validation"
 import { AuthField } from "./AuthField"
 import { SubmitButton } from "./SubmitButton"
+import { Checkbox } from "@/components/ui/checkbox"
 
 const initialState: AuthActionState = {}
 
 export function RegisterForm({ returnTo }: { returnTo: string }) {
   const [state, action] = useActionState(registerAction, initialState)
+
+    const [showPassword, setShowPassword] = useState(false)
   return (
     <form action={action} className="space-y-5">
       <input type="hidden" name="returnTo" value={returnTo} />
@@ -29,17 +32,32 @@ export function RegisterForm({ returnTo }: { returnTo: string }) {
       <AuthField
         id="password"
         label="Password"
-        type="password"
+        type={showPassword ? "text" : "password"}
         autoComplete="new-password"
         errors={state.errors?.password}
       />
       <AuthField
         id="confirmPassword"
         label="Confirm password"
-        type="password"
+        type={showPassword ? "text" : "password"}
         autoComplete="new-password"
         errors={state.errors?.confirmPassword}
       />
+
+      <div className="flex items-center gap-2">
+        <Checkbox
+          id="show-password"
+          checked={showPassword}
+          onCheckedChange={(checked) => setShowPassword(!!checked)}
+        />
+        <label
+          htmlFor="show-password"
+          className="cursor-pointer text-sm font-medium text-gray-900 select-none dark:text-gray-100"
+        >
+          Show password
+        </label>
+      </div>
+
       {state.message ? (
         <p
           role="alert"
