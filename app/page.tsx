@@ -5,6 +5,10 @@ import { BookingSearch } from "@/components/home/BookingSearch"
 import { Footer } from "@/components/home/Footer"
 import { Header } from "@/components/home/Header"
 import { Suspense } from "react"
+import { WhatsIncluded } from "@/components/home/WhatsIncluded"
+import { Reviews } from "@/components/home/Reviews"
+import { StayInfo } from "@/components/home/StayInfo"
+import { Faq } from "@/components/home/Faq"
 import { FeaturedRooms, RoomMessage } from "@/components/home/FeaturedRooms"
 
 export default function Page() {
@@ -112,6 +116,10 @@ export default function Page() {
             </div>
           </div>
         </section>
+        <WhatsIncluded />
+        <Reviews />
+        <StayInfo />
+        <Faq />
       </main>
       <Footer />
     </div>
