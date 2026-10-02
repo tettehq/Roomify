@@ -245,7 +245,7 @@ async function RoomResults({
           ))}
         </div>
       ) : (
-        <Card className="mt-8 gap-0 px-6 py-0 py-14 text-center">
+        <Card className="mt-8 gap-0 px-6 py-14 text-center">
           <BedDouble className="mx-auto text-muted-foreground" size={30} />
           <h3 className="mt-4 font-heading text-xl font-semibold text-foreground">
             No rooms are available for your selected dates.
