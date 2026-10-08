@@ -3,6 +3,7 @@ import "server-only"
 import { asc, eq } from "drizzle-orm"
 import { menuItems, rooms } from "@/db/schema"
 
+
 export async function getAdminRooms() {
   const { db } = await import("@/db")
   return db.select().from(rooms).orderBy(asc(rooms.roomNumber))

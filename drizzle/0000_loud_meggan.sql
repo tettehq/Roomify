@@ -76,9 +76,14 @@ CREATE TABLE "users" (
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
+
+
 --> statement-breakpoint
 ALTER TABLE "bookings" ADD CONSTRAINT "bookings_guest_id_users_id_fk" FOREIGN KEY ("guest_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "bookings" ADD CONSTRAINT "bookings_room_id_rooms_id_fk" FOREIGN KEY ("room_id") REFERENCES "public"."rooms"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "bookings"
+ALTER COLUMN "check_in"  SET DATA TYPE date USING ("check_in"  AT TIME ZONE 'America/New_York')::date,
+ALTER COLUMN "check_out" SET DATA TYPE date USING ("check_out" AT TIME ZONE 'America/New_York')::date;
 ALTER TABLE "room_service_order_items" ADD CONSTRAINT "room_service_order_items_order_id_room_service_orders_id_fk" FOREIGN KEY ("order_id") REFERENCES "public"."room_service_orders"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "room_service_order_items" ADD CONSTRAINT "room_service_order_items_menu_item_id_menu_items_id_fk" FOREIGN KEY ("menu_item_id") REFERENCES "public"."menu_items"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "room_service_orders" ADD CONSTRAINT "room_service_orders_booking_id_bookings_id_fk" FOREIGN KEY ("booking_id") REFERENCES "public"."bookings"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint

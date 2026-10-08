@@ -8,6 +8,20 @@
       "when": 1789728115096,
       "tag": "0000_loud_meggan",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791400324243,
+      "tag": "0001_dashboard_and_search",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791408008058,
+      "tag": "0002_no_double_booking",
+      "breakpoints": true
     }
   ]
 }

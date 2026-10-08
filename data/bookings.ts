@@ -6,6 +6,7 @@ import { bookings, rooms, users } from "@/db/schema"
 import { parseRoomSearch } from "@/lib/room-search"
 import { getRoomById } from "./rooms"
 
+
 export type CreateGuestBookingResult =
   | {
       success: true

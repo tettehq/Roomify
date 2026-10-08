@@ -10,6 +10,7 @@ import {
   timestamp,
   uniqueIndex,
   uuid,
+  jsonb,
 } from "drizzle-orm/pg-core"
 import { relations, sql } from "drizzle-orm"
 import { ROOM_TYPES } from "@/lib/room-types"
@@ -143,6 +144,7 @@ export const roomServiceOrders = pgTable(
     bookingId: uuid("booking_id")
       .notNull()
       .references(() => bookings.id),
+    assignedToId: uuid("assigned_to_id").references(() => users.id),
     status: orderStatusEnum("status").notNull().default("PENDING"),
     totalAmount: decimal("total_amount", { precision: 10, scale: 2 })
       .notNull()
@@ -189,6 +191,29 @@ export const roomServiceOrderItems = pgTable(
   ]
 )
 
+export const auditLog = pgTable(
+  "audit_log",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    actorId: uuid("actor_id"), // no foreign key, so history survives user deletion
+    actorName: text("actor_name"),
+    actorRole: text("actor_role"),
+    action: text("action").notNull(),
+    entityType: text("entity_type").notNull(),
+    entityId: text("entity_id").notNull(),
+    changes: jsonb("changes").$type<Record<string, [unknown, unknown]>>(),
+    metadata: jsonb("metadata").$type<Record<string, unknown>>(),
+    ip: text("ip"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    index("audit_log_entity_idx").on(table.entityType, table.entityId, table.createdAt),
+    index("audit_log_actor_idx").on(table.actorId, table.createdAt),
+    index("audit_log_created_idx").on(table.createdAt),
+  ]
+)
+
+
 export const userRelations = relations(users, ({ many }) => ({
   bookings: many(bookings),
 }))
@@ -210,6 +235,9 @@ export const roomServiceOrderRelations = relations(
       fields: [roomServiceOrders.bookingId],
       references: [bookings.id],
     }),
+    assignedTo: one(users, { 
+      fields: [roomServiceOrders.assignedToId], 
+      references: [users.id] }),
     items: many(roomServiceOrderItems),
   })
 )
