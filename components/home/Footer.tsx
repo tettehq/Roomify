@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { CurrentYear } from "./CurrentYear"
 
 export function Footer() {
   return (
@@ -19,10 +20,14 @@ export function Footer() {
           <Link href="/rooms">Explore rooms</Link>
           <Link href="/#experience">Our experience</Link>
           <Link href="/bookings">My bookings</Link>
+          <Link href="/location">Location & directions</Link>
+          <Link href="/faq">FAQ</Link>
+          <Link href="/policies">Privacy policy</Link>
+          <Link href="/accessibility">Accessibility</Link>
         </nav>
       </div>
       <div className="mx-auto max-w-7xl border-t border-border px-5 py-5 text-xs text-muted-foreground sm:px-8">
-        © 2026 Roomify. Crafted for restful stays.
+        <p>© <CurrentYear /> Roomify. Crafted for restful stays.</p>
       </div>
     </footer>
   )
