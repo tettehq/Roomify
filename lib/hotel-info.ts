@@ -63,7 +63,7 @@ export const faqs = [
         { category: "Booking", q: "Can I check in early", a: "Early check-in depends on availability. Request it when you book and we'll confirm the day before."},
         { category: "Booking", q: "Can I change my dates?", a: "Yes, from the Bookings page, free of charge up to 48 hours before check-in "},
         { category: "During your stay", q: "Are pets allowed?", a: "Service pets are allowed. Pet-friendly rooms are available on request."},
-        { category: "During your stay", q: "How do I order room service?", a: "Use the Roomify app or the rablet in your room to order food and amenitiews 24/7."},
+        { category: "During your stay", q: "How do I order room service?", a: "Use the Roomify app or the tablet in your room to order food and amenities 24/7."},
         { category: "Getting here", q: "Is there parking?", a: "Yes, on-site parking is avaiable for a daily fee."}
 ]
 
