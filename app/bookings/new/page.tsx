@@ -140,11 +140,11 @@ export default async function BookingReviewPage({
             Final review
           </p>
           <h1 className="mt-2 font-heading text-3xl font-bold tracking-[-0.04em] text-foreground sm:text-4xl">
-            Review your reservation
+            Review and pay
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
-            Confirm the room, stay, and guest details below. Availability and
-            pricing will be checked once more when you confirm.
+            Review your stay, then complete a simulated card payment to confirm
+            your reservation. No money will be charged.
           </p>
         </div>
 
@@ -251,6 +251,7 @@ export default async function BookingReviewPage({
               checkOut={context.data.checkOut}
               guests={context.data.guests}
               searchHref={searchHref}
+              total={multiplyMoney(room.baseRate, context.data.nights)}
             />
           </aside>
         </div>

@@ -6,10 +6,21 @@ import { requireRole } from "@/lib/auth/authorization"
 import { bookingRequestFromFormData } from "@/lib/booking-request"
 import { parseRoomSearch } from "@/lib/room-search"
 import { isUuid } from "@/lib/uuid"
+import {
+  simulateCardPayment,
+  type PaymentErrors,
+} from "@/lib/payment-simulation"
 
 export type ConfirmBookingState = {
-  code?: "INVALID" | "CAPACITY" | "UNAVAILABLE" | "ERROR"
+  code?:
+    | "INVALID"
+    | "CAPACITY"
+    | "UNAVAILABLE"
+    | "ERROR"
+    | "PAYMENT_INVALID"
+    | "PAYMENT_DECLINED"
   message?: string
+  paymentErrors?: PaymentErrors
 }
 
 export async function confirmBookingAction(
@@ -28,6 +39,15 @@ export async function confirmBookingAction(
   const parsed = parseRoomSearch({ checkIn, checkOut, guests })
   if (!parsed.success) {
     return { code: "INVALID", message: parsed.errors[0] }
+  }
+
+  const payment = simulateCardPayment(formData)
+  if (!payment.success) {
+    return {
+      code: payment.code,
+      message: payment.message,
+      paymentErrors: payment.errors,
+    }
   }
 
   let result
