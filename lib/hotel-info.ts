@@ -29,9 +29,9 @@ export const policies = [
         href: "/policies#payment"
     },
     {
-        title: "Accessabiliity",
+        title: "Accessibility",
         text: "Elevator access",
-        href: "/accessability"
+        href: "/policies#accessibility"
     },
 ]
 
