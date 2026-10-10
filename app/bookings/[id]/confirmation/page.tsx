@@ -71,6 +71,9 @@ export default async function BookingConfirmationPage({
             <p className="mt-3 text-sm text-primary-foreground">
               We look forward to welcoming you, {user.name}.
             </p>
+            <p className="mt-3 text-sm text-primary-foreground">
+              Demo checkout only. No real payment is collected by this app.
+            </p>
           </div>
 
           <div className="grid md:grid-cols-[minmax(240px,0.85fr)_1.15fr]">
