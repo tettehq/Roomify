@@ -31,7 +31,7 @@ export const policies = [
     {
         title: "Accessibility",
         text: "Elevator access",
-        href: "/policies#accessibility"
+        href: "/accessibility"
     },
 ]
 
