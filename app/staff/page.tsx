@@ -1,8 +1,7 @@
 import { Card } from "@/components/ui/card"
 import Link from "next/link"
 import { ArrowRight, BedDouble, LogIn, LogOut, Utensils } from "lucide-react"
-import { Footer } from "@/components/home/Footer"
-import { Header } from "@/components/home/Header"
+
 import { RoomStatusForm } from "@/components/staff/StatusForm"
 import { getRoomStatusRows, getStaffDashboardData } from "@/data/operations"
 import { requireRole } from "@/lib/auth/authorization"
@@ -25,17 +24,15 @@ export default async function StaffDashboardPage() {
     ])
   } catch {
     return (
-      <div className="min-h-screen bg-background">
-        <Header />
+      <div className="min-w-0">
         <main id="main-content" className="mx-auto max-w-5xl px-5 py-16">
-          <h1 className="font-heading text-3xl font-bold text-foreground">
-            Staff dashboard unavailable
+          <h1 className="font-heading text-3xl font-semibold tracking-tight text-foreground">
+            Front desk unavailable
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
             Please try again shortly.
           </p>
         </main>
-        <Footer />
       </div>
     )
   }
@@ -43,19 +40,18 @@ export default async function StaffDashboardPage() {
     data.roomSummary.map((item) => [item.status, item.count])
   )
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <div className="min-w-0">
       <main
         id="main-content"
-        className="mx-auto min-h-[70vh] max-w-7xl px-5 py-10 sm:px-8 lg:py-14"
+        className="mx-auto max-w-[1500px] px-5 py-8 sm:px-8 lg:px-10 lg:py-10"
       >
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div>
             <p className="text-xs font-bold tracking-[0.18em] text-muted-foreground uppercase">
               Operations
             </p>
-            <h1 className="mt-2 font-heading text-3xl font-bold text-foreground sm:text-4xl">
-              Staff dashboard
+            <h1 className="mt-2 font-heading text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+              Front desk
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
               Today&apos;s arrivals, departures, stays, and room readiness.
@@ -90,7 +86,7 @@ export default async function StaffDashboardPage() {
             value={data.pendingOrders}
           />
         </div>
-        <div className="mt-8 grid gap-7 lg:grid-cols-2">
+        <div className="mt-8 grid items-start gap-6 xl:grid-cols-2">
           <OperationsList
             title="Today's arrivals"
             entries={data.arrivals.map(
@@ -105,7 +101,7 @@ export default async function StaffDashboardPage() {
             )}
             empty="No departures scheduled today."
           />
-          <Card className="gap-0 p-6 py-0">
+          <Card className="gap-0 rounded-xl p-6 shadow-none">
             <h2 className="font-heading text-xl font-semibold text-foreground">
               Room status
             </h2>
@@ -114,7 +110,7 @@ export default async function StaffDashboardPage() {
               {statusCount.OCCUPIED ?? 0} · Needs cleaning{" "}
               {statusCount.NEEDS_CLEANING ?? 0}
             </p>
-            <div className="mt-5 space-y-3">
+            <div className="mt-5 max-h-[480px] space-y-3 overflow-y-auto pr-1">
               {roomRows.map((room) => (
                 <div
                   key={room.id}
@@ -128,7 +124,7 @@ export default async function StaffDashboardPage() {
               ))}
             </div>
           </Card>
-          <Card className="gap-0 p-6 py-0">
+          <Card className="gap-0 rounded-xl p-6 shadow-none">
             <div className="flex items-center justify-between gap-3">
               <h2 className="font-heading text-xl font-semibold text-foreground">
                 Active bookings
@@ -166,7 +162,6 @@ export default async function StaffDashboardPage() {
           </Card>
         </div>
       </main>
-      <Footer />
     </div>
   )
 }
@@ -181,12 +176,12 @@ function Metric({
   value: number | string
 }) {
   return (
-    <Card className="gap-0 p-5 py-0">
+    <Card className="gap-0 rounded-xl p-5 shadow-none">
       <span className="text-muted-foreground">{icon}</span>
       <p className="mt-4 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
         {label}
       </p>
-      <p className="mt-1 font-heading text-3xl font-bold text-foreground">
+      <p className="mt-1 font-heading text-3xl font-semibold tracking-tight text-foreground">
         {value}
       </p>
     </Card>
@@ -202,7 +197,7 @@ function OperationsList({
   empty: string
 }) {
   return (
-    <Card className="gap-0 p-6 py-0">
+    <Card className="gap-0 rounded-xl p-6 shadow-none">
       <h2 className="font-heading text-xl font-semibold text-foreground">
         {title}
       </h2>

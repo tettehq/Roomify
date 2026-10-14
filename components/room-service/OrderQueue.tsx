@@ -36,7 +36,25 @@ export function OrderQueue({ initialOrders }: { initialOrders: QueueOrder[] }) {
   })
 
   return (
-    <div className="mt-7 space-y-4">
+    <div className="mt-7 space-y-5">
+      <div className="grid gap-4 sm:grid-cols-3">
+        {[
+          { label: "Awaiting preparation", status: "PENDING" },
+          { label: "In progress", status: "IN_PROGRESS" },
+          { label: "Active orders", status: "ALL" },
+        ].map(({ label, status }) => (
+          <div key={status} className="rounded-xl border bg-card p-5">
+            <p className="text-xs text-muted-foreground">{label}</p>
+            <p className="mt-2 text-3xl font-semibold tabular-nums">
+              {
+                orders.data.filter(
+                  (order) => status === "ALL" || order.status === status
+                ).length
+              }
+            </p>
+          </div>
+        ))}
+      </div>
       <div className="flex items-center justify-between gap-3">
         <p className="text-sm text-muted-foreground" role="status">
           {orders.isFetching
@@ -57,33 +75,35 @@ export function OrderQueue({ initialOrders }: { initialOrders: QueueOrder[] }) {
           <AlertDescription>{orders.error.message}</AlertDescription>
         </Alert>
       )}
-      {orders.data.map((order) => (
-        <Card key={order.id}>
-          <CardContent>
-            <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-              <div>
-                <p className="text-xs font-bold tracking-wide text-muted-foreground uppercase">
-                  Room {order.roomNumber} · {order.guestName}
-                </p>
-                <h2 className="mt-1 font-heading text-xl font-semibold text-foreground">
-                  Order {order.id.slice(0, 8)}
-                </h2>
-                <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-                  <span>${displayMoney(order.totalAmount)}</span>
-                  <StatusBadge status={order.status} />
+      <div className="grid gap-4 xl:grid-cols-2">
+        {orders.data.map((order) => (
+          <Card key={order.id} className="rounded-xl border shadow-none">
+            <CardContent>
+              <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+                <div>
+                  <p className="text-xs font-bold tracking-wide text-muted-foreground uppercase">
+                    Room {order.roomNumber} · {order.guestName}
+                  </p>
+                  <h2 className="mt-1 font-heading text-xl font-semibold text-foreground">
+                    Order {order.id.slice(0, 8)}
+                  </h2>
+                  <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+                    <span>${displayMoney(order.totalAmount)}</span>
+                    <StatusBadge status={order.status} />
+                  </div>
                 </div>
+                <OrderStatusForm orderId={order.id} status={order.status} />
               </div>
-              <OrderStatusForm orderId={order.id} status={order.status} />
-            </div>
-            <Link
-              href={`/staff/room-service/${order.id}`}
-              className="mt-4 inline-block text-sm font-semibold text-primary"
-            >
-              View order details →
-            </Link>
-          </CardContent>
-        </Card>
-      ))}
+              <Link
+                href={`/staff/room-service/${order.id}`}
+                className="mt-5 flex items-center justify-between border-t pt-4 text-xs font-semibold text-primary"
+              >
+                View order details →
+              </Link>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
       {!orders.data.length && (
         <Card>
           <CardContent className="py-6 text-center text-sm text-muted-foreground">

@@ -61,6 +61,7 @@ export const users = pgTable(
     email: text("email").notNull(),
     passwordHash: text("password_hash").notNull(),
     role: userRoleEnum("role").notNull().default("GUEST"),
+    isActive: boolean("is_active").notNull().default(true),
     ...timestamps,
   },
   (table) => [uniqueIndex("users_email_unique").on(table.email)]
@@ -204,15 +205,20 @@ export const auditLog = pgTable(
     changes: jsonb("changes").$type<Record<string, [unknown, unknown]>>(),
     metadata: jsonb("metadata").$type<Record<string, unknown>>(),
     ip: text("ip"),
-    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
   },
   (table) => [
-    index("audit_log_entity_idx").on(table.entityType, table.entityId, table.createdAt),
+    index("audit_log_entity_idx").on(
+      table.entityType,
+      table.entityId,
+      table.createdAt
+    ),
     index("audit_log_actor_idx").on(table.actorId, table.createdAt),
     index("audit_log_created_idx").on(table.createdAt),
   ]
 )
-
 
 export const userRelations = relations(users, ({ many }) => ({
   bookings: many(bookings),
@@ -235,9 +241,10 @@ export const roomServiceOrderRelations = relations(
       fields: [roomServiceOrders.bookingId],
       references: [bookings.id],
     }),
-    assignedTo: one(users, { 
-      fields: [roomServiceOrders.assignedToId], 
-      references: [users.id] }),
+    assignedTo: one(users, {
+      fields: [roomServiceOrders.assignedToId],
+      references: [users.id],
+    }),
     items: many(roomServiceOrderItems),
   })
 )

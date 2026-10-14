@@ -1,6 +1,6 @@
 import "server-only"
 
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 import { users, type UserRole } from "@/db/schema"
 
 const safeUserSelection = {
@@ -26,6 +26,7 @@ export async function findUserForAuthentication(email: string) {
       email: users.email,
       role: users.role,
       passwordHash: users.passwordHash,
+      isActive: users.isActive,
     })
     .from(users)
     .where(eq(users.email, email))
@@ -38,7 +39,7 @@ export async function getUserById(id: string): Promise<SafeUser | null> {
   const [user] = await db
     .select(safeUserSelection)
     .from(users)
-    .where(eq(users.id, id))
+    .where(and(eq(users.id, id), eq(users.isActive, true)))
     .limit(1)
   return user ?? null
 }

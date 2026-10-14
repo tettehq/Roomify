@@ -39,6 +39,7 @@ export async function saveRoomAction(formData: FormData) {
     status = value(formData, "status"),
     imageUrl = value(formData, "imageUrl")
   if (
+    (id && !isUuid(id)) ||
     !roomNumber ||
     !isRoomType(type) ||
     !description ||
@@ -59,8 +60,10 @@ export async function saveRoomAction(formData: FormData) {
     imageUrl: imageUrl || null,
   }
   try {
-    if (id && isUuid(id)) await updateAdminRoom(id, input)
-    else await createAdminRoom({ ...input, id: randomUUID() })
+    if (id) {
+      const updated = await updateAdminRoom(id, input)
+      if (!updated.length) throw new Error("Room not found")
+    } else await createAdminRoom({ ...input, id: randomUUID() })
   } catch {
     redirect("/admin/rooms?error=save")
   }
@@ -77,6 +80,7 @@ export async function saveMenuItemAction(formData: FormData) {
     imageUrl = value(formData, "imageUrl"),
     isAvailable = value(formData, "isAvailable") === "true"
   if (
+    (id && !isUuid(id)) ||
     !name ||
     !description ||
     !price ||
@@ -92,8 +96,10 @@ export async function saveMenuItemAction(formData: FormData) {
     isAvailable,
   }
   try {
-    if (id && isUuid(id)) await updateAdminMenuItem(id, input)
-    else await createAdminMenuItem({ ...input, id: randomUUID() })
+    if (id) {
+      const updated = await updateAdminMenuItem(id, input)
+      if (!updated.length) throw new Error("Menu item not found")
+    } else await createAdminMenuItem({ ...input, id: randomUUID() })
   } catch {
     redirect("/admin/menu?error=save")
   }

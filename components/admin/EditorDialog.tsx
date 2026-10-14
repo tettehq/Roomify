@@ -36,12 +36,12 @@ export function EditorDialog({
         {create ? title : "Edit"}
         {!create && <span className="sr-only"> {title}</span>}
       </DialogTrigger>
-      <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-2xl">
-        <DialogHeader className="pr-8">
+      <DialogContent className="workspace-editor max-h-[90dvh] overflow-y-auto p-0 sm:max-w-2xl">
+        <DialogHeader className="border-b bg-muted/40 px-6 py-5 pr-12">
           <DialogTitle className="text-xl">{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        {children}
+        <div className="px-6 pb-6">{children}</div>
       </DialogContent>
     </Dialog>
   )
