@@ -1,11 +1,11 @@
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { SelectField, SelectFieldOption } from "@/components/ui/select-field"
 import { Label } from "@/components/ui/label"
-import Link from "next/link"
+import { AdminShell } from "@/components/admin/AdminShell"
 import { saveRoomAction } from "@/app/actions/admin"
-import { Footer } from "@/components/home/Footer"
-import { Header } from "@/components/home/Header"
+
 import { getAdminRooms } from "@/data/admin"
 import { requireRole } from "@/lib/auth/authorization"
 import { ROOM_TYPES, ROOM_TYPE_LABELS } from "@/lib/room-types"
@@ -30,95 +30,127 @@ export default async function AdminRoomsPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
   await requireRole(["ADMIN"], "/admin/rooms")
-  const rooms = await getAdminRooms()
-  const { error } = await searchParams
+  const inventory = await getAdminRooms()
+  const { error, q, status: selectedStatus } = await searchParams
+  const query = typeof q === "string" ? q : ""
+  const status = typeof selectedStatus === "string" ? selectedStatus : ""
+  const rooms = inventory.filter(
+    (room) =>
+      `${room.roomNumber} ${ROOM_TYPE_LABELS[room.type]}`
+        .toLowerCase()
+        .includes(query.toLowerCase()) &&
+      (!status || room.status === status)
+  )
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <main
-        id="main-content"
-        className="mx-auto min-h-[70vh] max-w-7xl px-5 py-10 sm:px-8"
-      >
-        <Link
-          href="/admin"
-          className="text-sm text-muted-foreground hover:text-foreground"
+    <AdminShell
+      title="Rooms"
+      description="Keep your room inventory, nightly rates, and availability up to date."
+    >
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
+        <p className="text-sm font-medium text-muted-foreground">
+          {inventory.length} rooms ·{" "}
+          {inventory.filter((room) => room.status === "AVAILABLE").length}{" "}
+          available
+        </p>
+        <EditorDialog
+          title="Add room"
+          description="Set up room details, pricing, and capacity."
+          create
         >
-          Administration / Rooms
-        </Link>
-        <div className="my-7 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <h1 className="font-heading text-3xl font-semibold tracking-tight">
-              Room inventory
-            </h1>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Manage the spaces that make every stay special.
-            </p>
-          </div>
-          <EditorDialog
-            title="Add room"
-            description="Set up room details, pricing, and capacity."
-            create
-          >
-            <RoomForm />
-          </EditorDialog>
-        </div>
-        {error && (
-          <Alert variant="destructive" className="mb-6">
-            <AlertTitle>Changes could not be saved</AlertTitle>
-            <AlertDescription>
-              {error === "invalid"
-                ? "Check all required fields and try again."
-                : "Please check the details and try again."}
-            </AlertDescription>
-          </Alert>
-        )}
-        <Card className="gap-0 py-0">
-          <CardContent className="overflow-hidden px-0">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="pl-6">Room</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Capacity</TableHead>
-                  <TableHead>Nightly rate</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="pr-6 text-right">Manage</TableHead>
+          <RoomForm />
+        </EditorDialog>
+      </div>
+      <form className="flex flex-wrap gap-3 rounded-xl border bg-card p-4">
+        <Input
+          name="q"
+          aria-label="Search rooms"
+          placeholder="Search room number or type"
+          defaultValue={query}
+          className="sm:max-w-sm"
+        />
+        <select
+          name="status"
+          aria-label="Room status"
+          defaultValue={status}
+          className="h-10 rounded-lg border bg-background px-3 text-sm"
+        >
+          <option value="">All room statuses</option>
+          {statuses.map((value) => (
+            <option key={value} value={value}>
+              {value.toLowerCase().replaceAll("_", " ")}
+            </option>
+          ))}
+        </select>
+        <Button type="submit" variant="outline">
+          Search rooms
+        </Button>
+      </form>
+      {error && (
+        <Alert variant="destructive" className="mb-6">
+          <AlertTitle>Changes could not be saved</AlertTitle>
+          <AlertDescription>
+            {error === "invalid"
+              ? "Check all required fields and try again."
+              : "Please check the details and try again."}
+          </AlertDescription>
+        </Alert>
+      )}
+      <Card className="gap-0 overflow-hidden py-0 shadow-none">
+        <CardContent className="overflow-hidden px-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="pl-6">Room</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead>Capacity</TableHead>
+                <TableHead>Nightly rate</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="pr-6 text-right">Manage</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {rooms.map((room) => (
+                <TableRow key={room.id}>
+                  <TableCell className="pl-6 font-semibold">
+                    Room {room.roomNumber}
+                  </TableCell>
+                  <TableCell>
+                    <p className="font-medium">{ROOM_TYPE_LABELS[room.type]}</p>
+                    <p className="mt-1 max-w-64 truncate text-xs text-muted-foreground">
+                      {room.description}
+                    </p>
+                  </TableCell>
+                  <TableCell>{room.capacity} guests</TableCell>
+                  <TableCell className="tabular-nums">
+                    ${room.baseRate}
+                  </TableCell>
+                  <TableCell>
+                    <StatusBadge status={room.status} />
+                  </TableCell>
+                  <TableCell className="pr-6 text-right">
+                    <EditorDialog
+                      title={`Room ${room.roomNumber}`}
+                      description="Update details below, then save your changes."
+                    >
+                      <RoomForm room={room} />
+                    </EditorDialog>
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {rooms.map((room) => (
-                  <TableRow key={room.id}>
-                    <TableCell className="pl-6 font-semibold">
-                      Room {room.roomNumber}
-                    </TableCell>
-                    <TableCell>{ROOM_TYPE_LABELS[room.type]}</TableCell>
-                    <TableCell>{room.capacity} guests</TableCell>
-                    <TableCell className="tabular-nums">
-                      ${room.baseRate}
-                    </TableCell>
-                    <TableCell>
-                      <StatusBadge status={room.status} />
-                    </TableCell>
-                    <TableCell className="pr-6 text-right">
-                      <EditorDialog
-                        title={`Room ${room.roomNumber}`}
-                        description="Update details below, then save your changes."
-                      >
-                        <RoomForm room={room} />
-                      </EditorDialog>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-          <div className="border-t bg-muted/40 px-6 py-4 text-xs text-muted-foreground">
-            {rooms.length} rooms · Select Edit to manage an entry.
-          </div>
-        </Card>
-      </main>
-      <Footer />
-    </div>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+        {!rooms.length && (
+          <p className="px-6 py-12 text-center text-sm text-muted-foreground">
+            No rooms match these filters. Try another room number or status.
+          </p>
+        )}
+        <div className="border-t bg-muted/40 px-6 py-4 text-xs text-muted-foreground">
+          {rooms.length} of {inventory.length} rooms · Select Edit to manage an
+          entry.
+        </div>
+      </Card>
+    </AdminShell>
   )
 }
 function RoomForm({

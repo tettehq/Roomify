@@ -1,13 +1,13 @@
-import { Card } from "@/components/ui/card"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { Footer } from "@/components/home/Footer"
-import { Header } from "@/components/home/Header"
+import { ArrowLeft, ReceiptText } from "lucide-react"
+import { AdminShell } from "@/components/admin/AdminShell"
+import { StatusBadge } from "@/components/ui/status-badge"
+import { OrderStatusForm } from "@/components/room-service/StatusForm"
 import { getOrderById } from "@/data/room-service"
 import { requireRole } from "@/lib/auth/authorization"
-import { displayMoney } from "@/lib/money"
+import { displayMoney, multiplyMoney } from "@/lib/money"
 import { isUuid } from "@/lib/uuid"
-
 export default async function StaffOrderDetailPage({
   params,
 }: {
@@ -19,47 +19,79 @@ export default async function StaffOrderDetailPage({
   const order = await getOrderById(id)
   if (!order) notFound()
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <main
-        id="main-content"
-        className="mx-auto min-h-[70vh] max-w-3xl px-5 py-10 sm:px-8"
+    <AdminShell
+      title={`Order ${id.slice(0, 8)}`}
+      description={`Room ${order.roomNumber} · ${order.guestName}`}
+      action={<StatusBadge status={order.status} />}
+    >
+      <Link
+        href="/staff/room-service"
+        className="inline-flex items-center gap-2 text-sm font-medium text-primary"
       >
-        <Link
-          href="/staff/room-service"
-          className="text-sm font-semibold text-primary"
-        >
-          ← Room-service queue
-        </Link>
-        <Card className="mt-6 gap-0 p-6 py-0 sm:p-8">
-          <p className="text-xs font-bold tracking-wide text-muted-foreground uppercase">
-            Room {order.roomNumber} · {order.guestName}
-          </p>
-          <h1 className="mt-2 font-heading text-3xl font-bold text-foreground">
-            Order details
-          </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            {order.guestEmail} · {order.status.replaceAll("_", " ")}
-          </p>
-          <ul className="mt-6 space-y-3 border-y border-border py-5">
-            {order.items.map((item) => (
-              <li key={item.id} className="flex justify-between gap-4 text-sm">
-                <span className="text-foreground">
-                  {item.quantity} × {item.name}
-                </span>
-                <span className="font-medium text-foreground">
-                  ${displayMoney(item.unitPrice)}
-                </span>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-5 flex justify-between font-semibold text-foreground">
-            <span>Total</span>
+        <ArrowLeft size={16} />
+        Back to service orders
+      </Link>
+      <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+        <section className="overflow-hidden rounded-xl border bg-card">
+          <div className="flex items-center gap-3 border-b px-6 py-5">
+            <ReceiptText size={19} className="text-primary" />
+            <h2 className="font-heading text-lg font-semibold">Order items</h2>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Qty</th>
+                  <th>Unit price</th>
+                  <th>Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                {order.items.map((item) => (
+                  <tr key={item.id} className="border-t">
+                    <td className="font-medium">{item.name}</td>
+                    <td>{item.quantity}</td>
+                    <td>${displayMoney(item.unitPrice)}</td>
+                    <td className="font-semibold tabular-nums">
+                      ${multiplyMoney(item.unitPrice, item.quantity)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="flex justify-between border-t bg-muted/30 px-6 py-5 font-semibold">
+            <span>Order total</span>
             <span>${displayMoney(order.totalAmount)}</span>
-          </p>
-        </Card>
-      </main>
-      <Footer />
-    </div>
+          </div>
+        </section>
+        <aside className="space-y-6">
+          <section className="rounded-xl border bg-card p-6">
+            <h2 className="font-semibold">Delivery details</h2>
+            <p className="mt-5 text-2xl font-semibold">
+              Room {order.roomNumber}
+            </p>
+            <p className="mt-3 text-sm">{order.guestName}</p>
+            <p className="mt-1 text-xs break-all text-muted-foreground">
+              {order.guestEmail}
+            </p>
+          </section>
+          <section className="rounded-xl border bg-card p-6">
+            <h2 className="font-semibold">Order progress</h2>
+            <p className="my-4 text-xs leading-5 text-muted-foreground">
+              Start preparation when the team is ready. Mark the order complete
+              after delivery.
+            </p>
+            <OrderStatusForm orderId={id} status={order.status} />
+            {["COMPLETED", "CANCELLED"].includes(order.status) && (
+              <p className="text-sm text-muted-foreground">
+                This order is closed.
+              </p>
+            )}
+          </section>
+        </aside>
+      </div>
+    </AdminShell>
   )
 }

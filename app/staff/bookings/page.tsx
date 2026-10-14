@@ -4,8 +4,7 @@ import { SelectField, SelectFieldOption } from "@/components/ui/select-field"
 import Link from "next/link"
 import { BookingsTable } from "@/components/staff/BookingsTable"
 import { Search } from "lucide-react"
-import { Footer } from "@/components/home/Footer"
-import { Header } from "@/components/home/Header"
+
 import { getStaffBookings } from "@/data/bookings"
 import { requireRole } from "@/lib/auth/authorization"
 
@@ -33,16 +32,15 @@ export default async function StaffBookingsPage({
       : undefined
   const bookings = await getStaffBookings({ query, status })
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <div className="min-w-0">
       <main
         id="main-content"
-        className="mx-auto min-h-[70vh] max-w-7xl px-5 py-10 sm:px-8"
+        className="mx-auto max-w-[1500px] px-5 py-8 sm:px-8 lg:px-10 lg:py-10"
       >
         <Link href="/staff" className="text-sm font-semibold text-primary">
           ← Dashboard
         </Link>
-        <h1 className="mt-5 font-heading text-3xl font-bold text-foreground">
+        <h1 className="mt-5 font-heading text-3xl font-semibold tracking-tight text-foreground">
           Booking operations
         </h1>
         <form className="mt-6 flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 sm:flex-row">
@@ -72,7 +70,6 @@ export default async function StaffBookingsPage({
         </form>
         <BookingsTable key={`${query}:${status ?? ""}`} bookings={bookings} />
       </main>
-      <Footer />
     </div>
   )
 }

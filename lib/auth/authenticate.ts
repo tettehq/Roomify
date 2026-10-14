@@ -15,7 +15,7 @@ export async function authenticateUser(
     password,
     user?.passwordHash ?? DUMMY_PASSWORD_HASH
   )
-  if (!user || !passwordMatches) return null
+  if (!user || !user.isActive || !passwordMatches) return null
 
   return {
     id: user.id,

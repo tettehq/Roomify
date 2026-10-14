@@ -1,0 +1,57 @@
+.admin-workspace table {
+  background: var(--card);
+}
+.admin-workspace thead {
+  background: color-mix(in oklch, var(--muted) 65%, var(--card));
+}
+.admin-workspace th {
+  padding: 1rem 1.25rem;
+  color: var(--muted-foreground);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.admin-workspace td {
+  padding: 1.15rem 1.25rem;
+}
+.admin-workspace tbody tr {
+  transition: background 0.15s ease;
+}
+.admin-workspace tbody tr:hover {
+  background: color-mix(in oklch, var(--muted) 50%, var(--card));
+}
+.admin-workspace td:last-child,
+.admin-workspace th:last-child {
+  text-align: right;
+}
+.admin-workspace table input,
+.admin-workspace table select {
+  text-align: left;
+}
+
+.workspace-editor label {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.workspace-editor input:not([type="checkbox"]):not([type="hidden"]),
+.workspace-editor select,
+.workspace-editor textarea {
+  background: var(--background);
+}
+.workspace-editor fieldset {
+  border-radius: 0.75rem;
+}
+.workspace-editor form > fieldset {
+  padding: 0.25rem 0;
+}
+.workspace-editor form + form {
+  padding-top: 1.5rem;
+}
+.admin-workspace main > h1 {
+  letter-spacing: -0.035em;
+}
+.admin-workspace main > h1 + p {
+  line-height: 1.65;
+}
